@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Serilog;
 using WebApi.Middleware;
+using WebApi.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -80,22 +81,3 @@ app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.MapControllers();
 
 app.Run();
-
-public class NewsApiSettings
-{
-    public string ApiKey { get; set; }
-    public string BaseUrl { get; set; }
-}
-
-public class MoviesApiSettings
-{
-    public string ApiKey { get; set; }
-    public string BaseUrl { get; set; }
-}
-
-public class SpotifySettings
-{
-    public string ClientId { get; set; }
-    public string ClientSecret { get; set; }
-    public string BaseUrl { get; set; }
-}
