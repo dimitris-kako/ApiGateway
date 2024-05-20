@@ -112,9 +112,3 @@ You can find the Dockerfile inside the WebApi project of the solution
     ],
     "totalMoviesResults": 0
   }
-
-
-
-
-
-
