@@ -60,13 +60,24 @@ namespace Application.Services
                     var content = await response.Content.ReadAsStringAsync();
                     var result = JsonConvert.DeserializeObject<NewsResponse>(content);
 
+                    if (result == null || result.Articles == null)
+                    {
+                        _logger.LogWarning("No articles found for request: {Request}", request);
+                        return (new List<Article>(), 0);
+                    }
+
                     cacheEntry = (result.Articles, result.TotalResults);
                     _cache.Set(cacheKey, cacheEntry, TimeSpan.FromMinutes(10)); // Cache for 10 minutes
                 }
                 catch (HttpRequestException ex)
                 {
-                    _logger.LogError(ex, "Error ", ex);
-                    return (null, 0);
+                    _logger.LogError(ex, "Error fetching data from News API with URL: {Url}", url);
+                    return (new List<Article>(), 0);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "General error occurred.");
+                    return (new List<Article>(), 0);
                 }
             }
 

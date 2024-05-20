@@ -64,7 +64,7 @@ namespace Application.Services
                     var content = await response.Content.ReadAsStringAsync();
                     var result = JsonConvert.DeserializeObject<SpotifySearchResponse>(content);
 
-                    var tracks = result.Tracks.Items;
+                    var tracks = result.Tracks.Items ?? new List<SpotifyTrack>();
 
                     cacheEntry = (tracks, result.Tracks.Total);
                     _cache.Set(cacheKey, cacheEntry, TimeSpan.FromMinutes(10)); // Cache for 10 minutes
@@ -72,7 +72,12 @@ namespace Application.Services
                 catch (HttpRequestException ex)
                 {
                     _logger.LogError(ex, "Error fetching data from Spotify API with URL: {Url}", url);
-                    throw;
+                    return (new List<SpotifyTrack>(), 0);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "General error occurred.");
+                    return (new List<SpotifyTrack>(), 0);
                 }
             }
 
@@ -84,23 +89,36 @@ namespace Application.Services
             var cacheKey = "spotify_access_token";
             if (!_cache.TryGetValue(cacheKey, out string accessToken))
             {
-                var requestBody = new FormUrlEncodedContent(new[]
+                try
                 {
-                    new KeyValuePair<string, string>("grant_type", "client_credentials"),
-                    new KeyValuePair<string, string>("client_id", _clientId),
-                    new KeyValuePair<string, string>("client_secret", _clientSecret)
-                });
+                    var requestBody = new FormUrlEncodedContent(new[]
+                    {
+                        new KeyValuePair<string, string>("grant_type", "client_credentials"),
+                        new KeyValuePair<string, string>("client_id", _clientId),
+                        new KeyValuePair<string, string>("client_secret", _clientSecret)
+                    });
 
-                var response = await _httpClient.PostAsync("https://accounts.spotify.com/api/token", requestBody);
-                response.EnsureSuccessStatusCode();
+                    var response = await _httpClient.PostAsync("https://accounts.spotify.com/api/token", requestBody);
+                    response.EnsureSuccessStatusCode();
 
-                var content = await response.Content.ReadAsStringAsync();
-                var tokenResponse = JsonConvert.DeserializeObject<SpotifyTokenResponse>(content);
+                    var content = await response.Content.ReadAsStringAsync();
+                    var tokenResponse = JsonConvert.DeserializeObject<SpotifyTokenResponse>(content);
 
-                accessToken = tokenResponse.AccessToken;
-                var expiresIn = tokenResponse.ExpiresIn;
+                    accessToken = tokenResponse.AccessToken;
+                    var expiresIn = tokenResponse.ExpiresIn;
 
-                _cache.Set(cacheKey, accessToken, TimeSpan.FromSeconds(expiresIn - 60));
+                    _cache.Set(cacheKey, accessToken, TimeSpan.FromSeconds(expiresIn - 60));
+                }
+                catch (HttpRequestException ex)
+                {
+                    _logger.LogError(ex, "Error fetching access token from Spotify API");
+                    return string.Empty;
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "General error occurred while fetching access token");
+                    return string.Empty;
+                }
             }
 
             return accessToken;

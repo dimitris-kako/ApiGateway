@@ -20,5 +20,9 @@ namespace Application.Models.Gateway
         public int? SpotifyPageSize { get; set; } = 10;
 
         public int? SpotifyOffset { get; set; } = 0;
+
+        public int? MoviesPage { get; set; } = 1;
+
+        public string? MoviesYear { get; set; } 
     }
 }

@@ -24,7 +24,7 @@ Log.Logger = new LoggerConfiguration()
 builder.Host.UseSerilog();
 
 var spotifyApiSettings = builder.Configuration.GetSection("Spotify").Get<SpotifySettings>();
-builder.Services.AddHttpClient<SpotifyService>((serviceProvider, httpClient) =>
+builder.Services.AddHttpClient<ISpotifyService, SpotifyService>((serviceProvider, httpClient) =>
 {
     httpClient.BaseAddress = new Uri(spotifyApiSettings.BaseUrl);
 }).ConfigurePrimaryHttpMessageHandler(() =>
@@ -41,6 +41,18 @@ builder.Services.AddHttpClient<INewsService, NewsService>((serviceProvider, http
     httpClient.DefaultRequestHeaders.Add("Authorization", newsApiSettings.ApiKey);
     httpClient.BaseAddress = new Uri(newsApiSettings.BaseUrl);
     httpClient.DefaultRequestHeaders.Add("User-Agent", "ApiAggregationApp/1.0");
+}).ConfigurePrimaryHttpMessageHandler(() =>
+{
+    return new SocketsHttpHandler
+    {
+        PooledConnectionLifetime = TimeSpan.FromMinutes(5)
+    };
+});
+
+var moviesApiSettings = builder.Configuration.GetSection("MoviesApi").Get<MoviesApiSettings>();
+builder.Services.AddHttpClient<IMoviesService, MoviesService>((serviceProvider, httpClient) =>
+{
+    httpClient.BaseAddress = new Uri(moviesApiSettings.BaseUrl);
 }).ConfigurePrimaryHttpMessageHandler(() =>
 {
     return new SocketsHttpHandler
@@ -70,6 +82,12 @@ app.MapControllers();
 app.Run();
 
 public class NewsApiSettings
+{
+    public string ApiKey { get; set; }
+    public string BaseUrl { get; set; }
+}
+
+public class MoviesApiSettings
 {
     public string ApiKey { get; set; }
     public string BaseUrl { get; set; }

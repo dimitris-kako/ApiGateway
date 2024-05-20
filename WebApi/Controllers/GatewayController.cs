@@ -13,11 +13,15 @@ namespace WebApi.Controllers
     {
         private readonly INewsService _newsService;
         private readonly ISpotifyService _spotifyService;
+        private readonly IMoviesService _moviesService;
 
-        public GatewayController(INewsService newsService, SpotifyService spotifyService)
+        public GatewayController(INewsService newsService, 
+            ISpotifyService spotifyService,
+            IMoviesService moviesService)
         {
             _newsService = newsService;
             _spotifyService = spotifyService;
+            _moviesService = moviesService;
         }
 
         [HttpGet("search")]
@@ -29,14 +33,18 @@ namespace WebApi.Controllers
 
             var tracksTask = _spotifyService.SearchTracksAsync(request);
 
-            await Task.WhenAll(newsTask, tracksTask);
+            var moviesTask = _moviesService.SearchAsync(request);
+
+            await Task.WhenAll(newsTask, tracksTask, moviesTask);
 
             var response = new GatewayResponse
             {
                 Articles = newsTask.Result.Articles,
                 TotalNewsResults = newsTask.Result.TotalResults,
                 SpotifyTracks = tracksTask.Result.SpotifyTracks,
-                TotalSpotifyResults = tracksTask.Result.TotalResults
+                TotalSpotifyResults = tracksTask.Result.TotalResults,
+                Movies = moviesTask.Result.Movies,
+                TotalMoviesResults = moviesTask.Result.TotalResults
             };
 
             return Ok(response);
