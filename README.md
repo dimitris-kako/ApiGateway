@@ -24,6 +24,7 @@ This API Gateway integrates the following external APIs:
 2. Build and Run project
   - Can can either run project locally or use the Dockerfile included in the repo to run it in a Docker container.
   - After running the project you can find the Swagger page at https://localhost:7086/swagger/index.html
+![gateway](https://github.com/dimitris-kako/ApiGateway/assets/7683676/764fe2ba-f435-4590-af8c-d957f8bc4731)
 
 ### Configuration
 
@@ -62,6 +63,20 @@ The gateway leverages C#'s asynchronous programming model to handle multiple API
 ### Data Filtering
 
 Data filtering capabilities are built into the gateway to allow clients to specify exactly what information they need. This feature helps in reducing the bandwidth and processing time by filtering out unnecessary data directly at the gateway level. Clients can use query parameters to filter the results according to their requirements, such as filtering news by category or movies by release year.
+
+### Global Error Handling Middleware
+
+This API Gateway includes global error handling middleware to manage exceptions. This feature ensures that errors are managed in a unified way, improving the robustness and reliability of the API.
+
+### Logging
+
+This project uses Serilog for logging, providing both console and file logging. Serilog is a powerful logging library that allows for structured logging, making it easier to diagnose issues and understand application behavior.
+
+### Unit Testing
+Work in Progress
+
+### Authentication- Authorization 
+Not yet implemented! 
 
 ### Docker Support
 
