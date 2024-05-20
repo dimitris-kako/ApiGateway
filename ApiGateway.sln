@@ -10,6 +10,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi", "WebApi\WebApi.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Application\Application.csproj", "{581C2811-6B4D-492C-9284-D38799619186}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{0397D10C-34F7-4A38-95A1-BD2BD7A1A2FB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{30F63C66-0597-481A-8D27-C14021AF5C27}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,9 +28,16 @@ Global
 		{581C2811-6B4D-492C-9284-D38799619186}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{581C2811-6B4D-492C-9284-D38799619186}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{581C2811-6B4D-492C-9284-D38799619186}.Release|Any CPU.Build.0 = Release|Any CPU
+		{30F63C66-0597-481A-8D27-C14021AF5C27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30F63C66-0597-481A-8D27-C14021AF5C27}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30F63C66-0597-481A-8D27-C14021AF5C27}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30F63C66-0597-481A-8D27-C14021AF5C27}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{30F63C66-0597-481A-8D27-C14021AF5C27} = {0397D10C-34F7-4A38-95A1-BD2BD7A1A2FB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1D33B31A-F32B-4879-9EFA-2FCAB77E6882}

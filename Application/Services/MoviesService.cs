@@ -17,13 +17,13 @@ namespace Application.Services
     public class MoviesService : IMoviesService
     {
         private readonly HttpClient _httpClient;
-        private readonly ILogger<NewsService> _logger;
+        private readonly ILogger<MoviesService> _logger;
         private readonly IMemoryCache _cache;
         private readonly string _apiKey;
 
 
         public MoviesService(HttpClient httpClient, 
-            ILogger<NewsService> logger,
+            ILogger<MoviesService> logger,
             IMemoryCache cache,
             IConfiguration configuration)
         {

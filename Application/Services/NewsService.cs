@@ -49,7 +49,7 @@ namespace Application.Services
                 queryParams.Add($"pageSize={request.NewsPageSize}");
 
                 var queryString = string.Join("&", queryParams);
-                var url = $"everything?{queryString}";
+                var url = $"https://newsapi.org/v2/everything?{queryString}";
 
                 try
                 {

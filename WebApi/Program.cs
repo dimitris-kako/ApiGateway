@@ -24,10 +24,12 @@ Log.Logger = new LoggerConfiguration()
     .CreateLogger();
 builder.Host.UseSerilog();
 
-var spotifyApiSettings = builder.Configuration.GetSection("Spotify").Get<SpotifySettings>();
-builder.Services.AddHttpClient<ISpotifyService, SpotifyService>((serviceProvider, httpClient) =>
+var newsApiSettings = builder.Configuration.GetSection("NewsApi").Get<NewsApiSettings>();
+builder.Services.AddHttpClient<INewsService, NewsService>((serviceProvider, httpClient) =>
 {
-    httpClient.BaseAddress = new Uri(spotifyApiSettings.BaseUrl);
+    httpClient.DefaultRequestHeaders.Add("Authorization", newsApiSettings.ApiKey);
+    httpClient.BaseAddress = new Uri(newsApiSettings.BaseUrl);
+    httpClient.DefaultRequestHeaders.Add("User-Agent", "ApiAggregationApp/1.0");
 }).ConfigurePrimaryHttpMessageHandler(() =>
 {
     return new SocketsHttpHandler
@@ -36,12 +38,11 @@ builder.Services.AddHttpClient<ISpotifyService, SpotifyService>((serviceProvider
     };
 });
 
-var newsApiSettings = builder.Configuration.GetSection("NewsApi").Get<NewsApiSettings>();
-builder.Services.AddHttpClient<INewsService, NewsService>((serviceProvider, httpClient) =>
+
+var spotifyApiSettings = builder.Configuration.GetSection("Spotify").Get<SpotifySettings>();
+builder.Services.AddHttpClient<ISpotifyService, SpotifyService>((serviceProvider, httpClient) =>
 {
-    httpClient.DefaultRequestHeaders.Add("Authorization", newsApiSettings.ApiKey);
-    httpClient.BaseAddress = new Uri(newsApiSettings.BaseUrl);
-    httpClient.DefaultRequestHeaders.Add("User-Agent", "ApiAggregationApp/1.0");
+    httpClient.BaseAddress = new Uri(spotifyApiSettings.BaseUrl);
 }).ConfigurePrimaryHttpMessageHandler(() =>
 {
     return new SocketsHttpHandler
