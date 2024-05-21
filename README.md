@@ -1,6 +1,6 @@
 # .NET Core 6 API Gateway
 
-This project implements an API Gateway in .NET Core 6 that aggregates data from multiple external APIs, providing a unified endpoint to access a variety of services. The purpose of this gateway is to simplify client-side interactions by consolidating multiple API requests into a single request-response cycle.
+This project implements an API Gateway in .NET Core 6 that aggregates data from multiple external APIs, providing a unified endpoint to access a variety of services. The purpose of this gateway is to simplify client-side interactions by consolidating multiple API requests into a single request-response cycle. The basic concept of the API is to search for movies, songs and news articles that include a specific keyword. 
 
 ## External APIs Used
 
